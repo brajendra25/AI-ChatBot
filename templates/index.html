@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+     {% include 'header.html' %}
+    <body>
+
+       <!--Chat Bot-->
+        <div id="dvChatbot">
+            <div class="box"></div>
+            <div class="chatIcon">
+                <img src="../static/img/chatbot.png" width="150px" height="150px">
+            </div>
+           
+            <div class="boxed hidden">
+                <div style="height: 80px; width: 450px;  border-radius: 10px; position: fixed; background-color: cornflowerblue;">
+                   <p style="font-size: large; ">❤️ Hi! I am IndoCOVID-19 ❤️</p>
+                  <p style="font-size: smaller; margin-left: 10%; margin-top: -15px;"> How can I help you !!</p>
+                <p class="close" style="margin-right: 2px; z-index: -99999; color: rgb(218, 38, 38); opacity:2; margin-top: -65px;">Close X</p>
+                </div>
+                <br/><br/><br/><br/>
+                <div id="chatbox">
+                  
+                </div>
+                
+                <div id="dots" class="hidden">
+                    <span class="dot"></span> <span class="dot"></span>
+                    <span class="dot"></span><span class="dot"></span>
+                </div>
+
+
+                <div id="userInput">
+                  <div class="form-group">
+                    <input id="textInput" class="form-control" type="text" name="msg" 
+                        placeholder="Type Message" />
+                    <button class="btn" style="width: 15%; height: 44px;  border-radius: 5px;" onclick="getBotResponse();">Send</button>
+                </div>
+                </div>
+             
+             
+            </div>
+          </div>
+        <!--End of Chatbot-->
+
+        <!-- jQuery -->
+        <script src="/static/js/jquery.min.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="/static/js/bootstrap.min.js"></script>
+
+       
+        
+     
+       
+        <!--For Chat Bot-->
+        <script>
+            $(document).ready(function(){
+             $(".boxed").height("20px");
+
+            $(".close").click(function(){
+                $(".boxed").addClass("hidden")
+                $(".boxed").height("20px");
+            });
+            $(".chatIcon img").click(function(e) {
+                var _height = $(".boxed").height();
+                if(_height=="20")
+                 {
+                    $(".boxed").removeClass("hidden")
+                    $(".boxed").height("540px");
+                    $("#chatbox").html("")
+                    $("#dots").removeClass("hidden");
+                    setTimeout(
+                        function() 
+                        {
+                            var botHtml = '<p class="botText bot "><span class="" onclick=action(this)>' + "Hi, How are you?" + "</span></p>";
+                            $("#chatbox").append(botHtml);
+                            $("#dots").addClass("hidden");
+                        }, 2000);
+                        $("#dots").removeClass("hidden");
+                        setTimeout(
+                        function() 
+                        {
+                            var botHtml = '</br><p class="botText bot "><span>' + "How can I help you !!" + "</span></p>";
+                            $("#chatbox").append(botHtml);
+                            $("#dots").addClass("hidden");
+                        }, 4000);
+                        setTimeout(
+                        function() 
+                        {
+                            var botHtml = '</br><p class="message-options-button" onclick=action(this)><span>' + "Chatbot !!" + "</span></p>";
+                            $("#chatbox").append(botHtml);
+                            $("#dots").addClass("hidden");
+                        }, 5000);
+                        setTimeout(
+                        function() 
+                        {
+                            var botHtml = '<p class="message-options-button" onclick=action(this)><span>' + "AI/ML" + "</span></p>";
+                            $("#chatbox").append(botHtml);
+                            $("#dots").addClass("hidden");
+                        }, 5000);
+                        setTimeout(
+                        function() 
+                        {
+                            var botHtml = '<p class="message-options-button" onclick=action(this)><span>' + "Web & Mobile Apps" + "</span></p>";
+                            $("#chatbox").append(botHtml);
+                            $("#dots").addClass("hidden");
+                        }, 5000);
+
+                        setTimeout(
+                        function() 
+                        {
+                            var botHtml = '<p class="message-options-button" onclick=action(this)><span>' + "About COVID-19" + "</span></p>";
+                            $("#chatbox").append(botHtml);
+                            $("#dots").addClass("hidden");
+                        }, 5000);
+                    document.getElementById("userInput").scrollIntoView({ block: "start", behavior: "smooth" });
+                 }
+                else
+                {
+                    $(".boxed").addClass("hidden")
+                    $(".boxed").height("44px");
+                }
+
+            });
+
+            });
+
+            function getBotResponse() {
+            var rawText = $("#textInput").val();
+            var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+            $("#textInput").val("");
+            $("#chatbox").append(userHtml);
+            document.getElementById("userInput").scrollIntoView({ block: "start", behavior: "smooth" });
+            $("#dots").removeClass("hidden");
+            $.get("/get", { msg: rawText }).done(function(data) {
+                var botHtml = '<p class="botText bot"><span class="" onclick=action(this)>' + data + "</span></p>";
+                $("#dots").addClass("hidden");
+                
+                $("#chatbox").append(botHtml);
+                document.getElementById("userInput").scrollIntoView({ block: "start", behavior: "smooth" });
+            });
+            }
+            $("#textInput").keypress(function(e) {
+            if (e.which == 13) {
+                getBotResponse();
+            }
+            });
+
+         function action(obj)
+            {
+            val = $(obj).text();
+            $("#textInput").val(val)
+            getBotResponse();
+            }
+        </script>
+        <!--End of chatbot-->
+    </body>
+</html>
